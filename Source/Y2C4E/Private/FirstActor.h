@@ -15,6 +15,8 @@ class Y2C4E_API AFirstActor : public AActor
 
 public:
 	AFirstActor();
+	virtual void BeginPlay() override;
+	virtual void RotateChange();
 protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<USceneComponent> _Root;

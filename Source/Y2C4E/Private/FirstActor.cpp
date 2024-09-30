@@ -20,5 +20,16 @@ AFirstActor::AFirstActor()
 
 	_RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("Rotating Movement Component"));
 }
+void AFirstActor::BeginPlay()
+{
+	Super::BeginPlay();
+	FTimerHandle ActorSpinHandle;
+	GetWorldTimerManager().SetTimer(ActorSpinHandle, this, &AFirstActor::RotateChange, _RotationDelay, false);
+}
+
+void AFirstActor::RotateChange()
+{
+	_RotatingMovementComponent->RotationRate = FRotator(0,180,0);
+}
 
 
