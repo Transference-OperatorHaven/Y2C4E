@@ -9,27 +9,36 @@
 
 AFirstActor::AFirstActor()
 {
-	_Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	RootComponent = _Root;
+	//_Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	//RootComponent = _Root;
 
+	_Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	RootComponent = _Collider;
+	
 	_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	_Mesh->SetupAttachment(_Root);
+	_Mesh->SetupAttachment(RootComponent);
 
 	_Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
-	_Arrow->SetupAttachment(_Root);
+	_Arrow->SetupAttachment(RootComponent);
 
-	_RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("Rotating Movement Component"));
+	
+
+	//_RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("Rotating Movement Component"));
 }
 void AFirstActor::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle ActorSpinHandle;
-	GetWorldTimerManager().SetTimer(ActorSpinHandle, this, &AFirstActor::RotateChange, _RotationDelay, false);
+	//FTimerHandle ActorSpinHandle;
+	//GetWorldTimerManager().SetTimer(ActorSpinHandle, this, &AFirstActor::RotateChange, _RotationDelay, false);
 }
 
-void AFirstActor::RotateChange()
+void AFirstActor::Handle_ColliderHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Display, TEXT("DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS DEVELOPERS "));
+}
+/*void AFirstActor::RotateChange()
 {
 	_RotatingMovementComponent->RotationRate = FRotator(0,180,0);
-}
+}*/
 
 
