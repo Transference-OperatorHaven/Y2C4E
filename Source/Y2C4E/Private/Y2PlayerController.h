@@ -22,19 +22,34 @@ class Y2C4E_API AY2PlayerController : public APlayerController
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UPlayerInput> _DebugAction;
+	TObjectPtr<UInputAction> _ViewControlAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> _MoveAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> _JumpAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> _FireAction;
 
 	virtual void SetupInputComponent() override;
-	virtual void Debug(FInputActionValue value);
+	
+	void Move(const FInputActionValue& value);
+	void ViewControl(const FInputActionValue& value);
 	void Jump();
 	void StopJumping();
-	void Move();
-	void ViewControl();
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UInputAction* JumpAction;
+		void StartFire();
+	void StopFiring();
+
+	virtual void OnPossess(APawn* InPawn) override;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* ViewControlAction;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UInputAction* FireAction;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UInputAction* JumpAction;
+
+	
 	
 };
