@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Inputtable.h"
 #include "GameFramework/PlayerController.h"
 #include "Y2PlayerController.generated.h"
 
@@ -14,7 +15,7 @@ class UInputAction;
  * 
  */
 UCLASS(Abstract)
-class Y2C4E_API AY2PlayerController : public APlayerController
+class Y2C4E_API AY2PlayerController : public APlayerController, public IInterface
 {
 	GENERATED_BODY()
 
@@ -36,7 +37,7 @@ protected:
 	void ViewControl(const FInputActionValue& value);
 	void Jump();
 	void StopJumping();
-		void StartFire();
+	void StartFire();
 	void StopFiring();
 
 	virtual void OnPossess(APawn* InPawn) override;

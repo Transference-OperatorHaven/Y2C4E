@@ -44,7 +44,7 @@ protected:
 	TObjectPtr<UCapsuleComponent> _Collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UInputMappingContext> S_InputMapping;
+	TObjectPtr<UInputMappingContext> _InputMapping;
 	
 public:
 	// Called every frame

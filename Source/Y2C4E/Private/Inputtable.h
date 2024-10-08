@@ -34,8 +34,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Input_JumpRelease();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	vo
-	id Input_FirePress();
+	void Input_FirePress();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Input_FireRelease();
 	
