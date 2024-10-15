@@ -9,6 +9,8 @@
 #include "Components/CapsuleComponent.h"
 
 
+
+
 // Sets default values
 AP_FPS::AP_FPS()
 {
@@ -21,6 +23,16 @@ AP_FPS::AP_FPS()
 	_Collider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	_Collider->SetupAttachment(RootComponent);
 	
+}
+
+void AP_FPS::Handle_HealthDead(AController* causer)
+{
+	UE_LOG(LogTemp, Display, TEXT("PENIS"));
+}
+
+void AP_FPS::Handle_HealthDamaged(float current, float max, float change)
+{
+	UE_LOG(LogTemp, Display, TEXT("PENIS 2"));
 }
 
 void AP_FPS::Input_Move_Implementation(FVector2D value)
@@ -70,6 +82,9 @@ UInputMappingContext* AP_FPS::GetMappingContext_Implementation()
 void AP_FPS::BeginPlay()
 {
 	Super::BeginPlay();
+
+	_Health->OnDamaged.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDamaged);
+	_Health->OnDead.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDead);
 	
 }
 

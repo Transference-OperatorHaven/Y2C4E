@@ -16,7 +16,11 @@ UCLASS(Abstract)
 class Y2C4E_API AP_FPS : public ACharacter, public IInputtable
 {
 	GENERATED_BODY()
-
+private:
+	UFUNCTION()
+	void Handle_HealthDead(AController* causer);
+	UFUNCTION()
+	void Handle_HealthDamaged(float current, float max, float change);
 public:
 	// Sets default values for this character's properties
 	AP_FPS();

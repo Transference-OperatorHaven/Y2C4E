@@ -34,7 +34,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	UE_LOG(LogTemp, Display, TEXT("Damage taken: %f, %f"), change, _CurrentHealth);
 	if(_CurrentHealth <= 0.f)
 	{
-		UE_LOG(LogTemp, Display, TEXT("DEAD DEAD DEAD DEAD DEAD DEAD DEAD DEAD DEAD DEAD DEAD"));
+		OnDead.Broadcast(Instigator);
 	}
 }
 
