@@ -1,6 +1,7 @@
 #pragma once
  
 #include "CoreMinimal.h"
+#include "GameRule.h"
 #include "GameFramework/GameMode.h"
 #include "Y2GameMode.generated.h"
  
@@ -16,6 +17,8 @@ public:
 	virtual void Logout(AController* Exiting) override;
  
 protected:
+	
+	
 	TArray<TObjectPtr<AActor>> _PlayerStarts;
  
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -38,5 +41,14 @@ protected:
 
 	UFUNCTION()
 	void DecreaseCountdown();
+	
+	int _GameRulesLeft;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TObjectPtr<UGameRule>> _GameRuleManagers;
+ 
+	UFUNCTION()
+	void Handle_GameRuleCompleted();
+	UFUNCTION()
+	void Handle_GameRulePointsScored(AController* scorer, int points);
 };
 

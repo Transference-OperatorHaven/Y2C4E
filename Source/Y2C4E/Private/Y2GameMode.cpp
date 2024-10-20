@@ -38,6 +38,20 @@ void AY2GameMode::Logout(AController* Exiting)
  
 void AY2GameMode::HandleMatchIsWaitingToStart()
 {
+	TArray<UActorComponent*> outComponents;
+	GetComponents(outComponents);
+	for(UActorComponent* comp : outComponents)
+	{
+		if(UGameRule* rule = Cast<UGameRule>(comp))
+		{
+			_GameRuleManagers.Add(rule);
+			rule->Init();
+			rule->OnComplete.AddUniqueDynamic(this, &AY2GameMode::Handle_GameRuleCompleted);
+			rule->OnPointsScored.AddUniqueDynamic(this, &AY2GameMode::Handle_GameRulePointsScored);
+			_GameRulesLeft++;
+		}
+	}
+    
 	GetWorld()->GetTimerManager().SetTimer(_TimerDecreaseCountdown, this, &AY2GameMode::DecreaseCountdown, 1.f, false);
 	Super::HandleMatchIsWaitingToStart();
 }
@@ -54,6 +68,16 @@ void AY2GameMode::DecreaseCountdown()
 	{
 		GetWorld()->GetTimerManager().SetTimer(_TimerDecreaseCountdown, this, &AY2GameMode::DecreaseCountdown, 1.f, false);
 	}
+}
+
+void AY2GameMode::Handle_GameRuleCompleted()
+{
+	
+}
+
+void AY2GameMode::Handle_GameRulePointsScored(AController* scorer, int points)
+{
+	
 }
 
 void AY2GameMode::HandleMatchHasStarted()
