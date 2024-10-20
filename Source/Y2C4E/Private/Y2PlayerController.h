@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Inputtable.h"
+#include "Widget_HUD.h"
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
 #include "Y2PlayerController.generated.h"
 
@@ -21,6 +23,11 @@ class Y2C4E_API AY2PlayerController : public APlayerController, public IInterfac
 
 
 protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UWidget_HUD> _HUDWidgetClass;
+	TObjectPtr<UWidget_HUD> _HUDWidget;
+ 
+	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> _ViewControlAction;
@@ -50,6 +57,8 @@ protected:
 	UInputAction* FireAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* JumpAction;
+
+	
 
 	
 	

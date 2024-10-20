@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Inputtable.h"
+
 #include "Kismet/KismetSystemLibrary.h"
 
 void AY2PlayerController::SetupInputComponent()
@@ -20,6 +21,17 @@ void AY2PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AY2PlayerController::StartFire);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopFiring);
 		
+	}
+}
+
+void AY2PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+ 
+	if(_HUDWidgetClass)
+	{
+		_HUDWidget = CreateWidget<UWidget_HUD, AY2PlayerController*>( this, _HUDWidgetClass.Get());
+		_HUDWidget->AddToViewport();
 	}
 }
 
