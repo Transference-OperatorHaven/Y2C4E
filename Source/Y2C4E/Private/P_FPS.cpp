@@ -19,6 +19,8 @@ AP_FPS::AP_FPS()
 	_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	_Camera->SetupAttachment(RootComponent);
 	_Health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	_WeaponAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Attach"));
+	_WeaponAttachPoint->SetupAttachment(_Camera);
 	
 	_Collider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	_Collider->SetupAttachment(RootComponent);
@@ -56,11 +58,19 @@ void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 void AP_FPS::Input_FirePress_Implementation()
 {
 	IInputtable::Input_FirePress_Implementation();
+	if(_WeaponRef)
+	{
+		_WeaponRef->StartFire();
+	}
 }
 
 void AP_FPS::Input_FireRelease_Implementation()
 {
 	IInputtable::Input_FireRelease_Implementation();
+	if(_WeaponRef)
+	{
+		_WeaponRef->StopFire();
+	}
 }
 
 void AP_FPS::Input_JumpPress_Implementation()
@@ -85,6 +95,15 @@ void AP_FPS::BeginPlay()
 
 	_Health->OnDamaged.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDamaged);
 	_Health->OnDead.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDead);
+
+	if(_DefaultWeapon)
+	{
+		FActorSpawnParameters spawnParams;
+		spawnParams.Owner = this;
+		spawnParams.Instigator = this;
+		_WeaponRef = GetWorld()->SpawnActor<AWeapon_Base>(_DefaultWeapon, _WeaponAttachPoint->GetComponentTransform(), spawnParams);
+		_WeaponRef->AttachToComponent(_WeaponAttachPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	}
 	
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Inputtable.h"
+#include "Weapon_Base.h"
 #include "GameFramework/Character.h"
 #include "P_FPS.generated.h"
 
@@ -16,6 +17,13 @@ UCLASS(Abstract)
 class Y2C4E_API AP_FPS : public ACharacter, public IInputtable
 {
 	GENERATED_BODY()
+protected:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<USceneComponent> _WeaponAttachPoint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AWeapon_Base> _DefaultWeapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<AWeapon_Base> _WeaponRef;
 private:
 	UFUNCTION()
 	void Handle_HealthDead(AController* causer);
