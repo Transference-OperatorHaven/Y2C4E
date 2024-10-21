@@ -14,6 +14,7 @@
 // Sets default values
 AP_FPS::AP_FPS()
 {
+	UE_LOG(LogTemp, Display, TEXT("PAWN SPAWNED AND CONSTRUCTED"));
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -40,10 +41,11 @@ void AP_FPS::Handle_HealthDamaged(float current, float max, float change)
 void AP_FPS::Input_Move_Implementation(FVector2D value)
 {
 	
-	UE_LOG(LogTemp, Display, TEXT("not smelly"));
+	
 	IInputtable::Input_Move_Implementation(value);
 	AddMovementInput(FVector::VectorPlaneProject(_Camera->GetForwardVector(), FVector::UpVector).GetSafeNormal(), value.Y);
 	AddMovementInput(_Camera->GetRightVector(), value.X);
+	UE_LOG(LogTemp, Display, TEXT("not smelly: %f, %f"), value.X, value.Y);
 }
 
 void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
@@ -75,17 +77,22 @@ void AP_FPS::Input_FireRelease_Implementation()
 
 void AP_FPS::Input_JumpPress_Implementation()
 {
-	IInputtable::Input_JumpPress_Implementation();
+	ACharacter::Jump();
 }
 
 void AP_FPS::Input_JumpRelease_Implementation()
 {
-	IInputtable::Input_JumpRelease_Implementation();
+	ACharacter::StopJumping();
 }
 
 UInputMappingContext* AP_FPS::GetMappingContext_Implementation()
 {
 	return _InputMapping;
+}
+
+UBehaviorTree* AP_FPS::GetBehaviourTree_Implementation()
+{
+	return _BehaviorTree;
 }
 
 // Called when the game starts or when spawned

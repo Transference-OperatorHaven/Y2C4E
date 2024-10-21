@@ -28,7 +28,7 @@ protected:
 	TObjectPtr<USceneComponent> _Root;
  
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<USkeletalMeshComponent> _Mesh;
+	TObjectPtr<UStaticMeshComponent> _Mesh;
     
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UArrowComponent> _Muzzle;

@@ -35,4 +35,3 @@ void AProjectile::Handle_Hit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 		Destroy();
 	}
 }
-

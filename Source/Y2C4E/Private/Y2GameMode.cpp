@@ -86,6 +86,7 @@ void AY2GameMode::HandleMatchHasStarted()
 	for(AController* controller : _PlayerControllers)
 	{
 		RestartPlayer(controller);
+		UE_LOG(LogTemp, Display, TEXT("Spawning player") );
 	}
 	Super::HandleMatchHasStarted();
 }

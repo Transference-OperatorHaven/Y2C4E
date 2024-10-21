@@ -14,12 +14,12 @@ void AY2PlayerController::SetupInputComponent()
 
 	if(UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Move);
-		EnhancedInputComponent->BindAction(ViewControlAction, ETriggerEvent::Triggered, this, &AY2PlayerController::ViewControl);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopJumping);
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AY2PlayerController::StartFire);
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopFiring);
+		EnhancedInputComponent->BindAction(_MoveAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Move);
+		EnhancedInputComponent->BindAction(_ViewControlAction, ETriggerEvent::Triggered, this, &AY2PlayerController::ViewControl);
+		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Jump);
+		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopJumping);
+		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Triggered, this, &AY2PlayerController::StartFire);
+		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopFiring);
 		
 	}
 }
@@ -109,7 +109,7 @@ void AY2PlayerController::StopFiring()
 void AY2PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	UE_LOG(LogTemp, Display, TEXT("PAWN POSSESSED!!!"));
 	if(UEnhancedInputLocalPlayerSubsystem* _subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputtable::StaticClass()))
@@ -117,5 +117,4 @@ void AY2PlayerController::OnPossess(APawn* InPawn)
 			_subsystem->AddMappingContext(IInputtable::Execute_GetMappingContext(InPawn), 0);
 		}
 	}
-	
 }

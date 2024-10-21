@@ -41,5 +41,3 @@ void AFirstActor::Handle_ColliderHit(UPrimitiveComponent* HitComponent, AActor* 
 {
 	_RotatingMovementComponent->RotationRate = FRotator(0,180,0);
 }*/
-
-

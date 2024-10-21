@@ -3,13 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Inputtable.h"
 #include "Widget_HUD.h"
-#include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
 #include "Y2PlayerController.generated.h"
 
-
+class UWidget_HUD;
 struct FInputActionValue;
 class UInputAction;
 
@@ -37,7 +35,7 @@ protected:
 	TObjectPtr<UInputAction> _JumpAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> _FireAction;
-
+	
 	virtual void SetupInputComponent() override;
 	
 	void Move(const FInputActionValue& value);
@@ -49,14 +47,14 @@ protected:
 
 	virtual void OnPossess(APawn* InPawn) override;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	/*UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* ViewControlAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* FireAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UInputAction* JumpAction;
+	UInputAction* JumpAction;*/
 
 	
 

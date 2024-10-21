@@ -37,4 +37,3 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 		OnDead.Broadcast(Instigator);
 	}
 }
-
