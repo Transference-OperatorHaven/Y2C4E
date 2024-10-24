@@ -45,15 +45,17 @@ void AP_FPS::Input_Move_Implementation(FVector2D value)
 	IInputtable::Input_Move_Implementation(value);
 	AddMovementInput(FVector::VectorPlaneProject(_Camera->GetForwardVector(), FVector::UpVector).GetSafeNormal(), value.Y);
 	AddMovementInput(_Camera->GetRightVector(), value.X);
-	UE_LOG(LogTemp, Display, TEXT("not smelly: %f, %f"), value.X, value.Y);
+
 }
 
 void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 {
-	UE_LOG(LogTemp, Display, TEXT("Smelly"));
 	IInputtable::Input_ViewControl_Implementation(value);
 	AddActorWorldRotation(FRotator(0.f, value.X, 0.f));
-	
+	if(_Camera->GetRelativeRotation().Pitch + value.Y > 90.0f || _Camera->GetRelativeRotation().Pitch + value.Y < 90.0f)
+	{
+		value.Y = 0;
+	}	
 	_Camera->AddLocalRotation(FRotator(value.Y, 0.f, 0.f));
 }
 

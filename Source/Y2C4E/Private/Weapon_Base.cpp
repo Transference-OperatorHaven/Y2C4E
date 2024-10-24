@@ -22,7 +22,7 @@ void AWeapon_Base::StartFire()
     Fire();
     if(_FireDelay != 0.f)
     {
-       GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::Fire, _FireDelay, true);
+        GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::Fire, _FireDelay, true);
     }
 }
  

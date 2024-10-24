@@ -16,9 +16,9 @@ void AY2PlayerController::SetupInputComponent()
 	{
 		EnhancedInputComponent->BindAction(_MoveAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Move);
 		EnhancedInputComponent->BindAction(_ViewControlAction, ETriggerEvent::Triggered, this, &AY2PlayerController::ViewControl);
-		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Triggered, this, &AY2PlayerController::Jump);
+		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Started, this, &AY2PlayerController::Jump);
 		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopJumping);
-		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Triggered, this, &AY2PlayerController::StartFire);
+		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Started, this, &AY2PlayerController::StartFire);
 		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopFiring);
 		
 	}

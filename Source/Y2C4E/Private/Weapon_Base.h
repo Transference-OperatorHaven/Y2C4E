@@ -20,7 +20,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FWeaponFireSignature OnFire;
     
-	void StartFire();
+	void  StartFire();
 	void StopFire();
     
 protected:
