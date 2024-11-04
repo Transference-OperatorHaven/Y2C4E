@@ -6,8 +6,11 @@
  
 AProjectile::AProjectile()
 {
+	
 	_Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	RootComponent = _Collider;
+	_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	_Mesh->SetupAttachment(RootComponent);
 	_Collider->SetCollisionProfileName("Projectile");
 	_Collider->OnComponentHit.AddUniqueDynamic(this, &AProjectile::Handle_Hit);
  

@@ -18,6 +18,8 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> _Collider;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UStaticMeshComponent> _Mesh; 
  
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UProjectileMovementComponent> _ProjectileMovement;

@@ -27,6 +27,8 @@ public:
 	virtual void Input_FireRelease_Implementation() override;
 	virtual void Input_JumpPress_Implementation() override;
 	virtual void Input_JumpRelease_Implementation() override;
+	virtual void Input_CrouchPress_Implementation() override;
+	virtual void Input_CrouchRelease_Implementation() override;
 
 	virtual UInputMappingContext* GetMappingContext_Implementation() override;
 	virtual UBehaviorTree* GetBehaviourTree_Implementation() override;

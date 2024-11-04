@@ -20,7 +20,7 @@ AWeapon_Base::AWeapon_Base()
 void AWeapon_Base::StartFire()
 {
     Fire();
-    if(_FireDelay != 0.f)
+    if(_FireDelay != 0.f) //if theres a delay between shots
     {
         GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::Fire, _FireDelay, true);
     }

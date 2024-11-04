@@ -50,13 +50,16 @@ void AP_FPS::Input_Move_Implementation(FVector2D value)
 
 void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 {
+	
 	IInputtable::Input_ViewControl_Implementation(value);
 	AddActorWorldRotation(FRotator(0.f, value.X, 0.f));
-	if(_Camera->GetRelativeRotation().Pitch + value.Y > 90.0f || _Camera->GetRelativeRotation().Pitch + value.Y < 90.0f)
+	if((_Camera->GetRelativeRotation().Pitch + value.Y) > 90.0f || (_Camera->GetRelativeRotation().Pitch + value.Y) < -90.0f)
 	{
+		//UE_LOG(LogTemp,Display, TEXT("The pitch is: %f and value.Y is %f so together they'd exceed limits"), _Camera->GetRelativeRotation().Pitch, value.Y);
 		value.Y = 0;
 	}	
 	_Camera->AddLocalRotation(FRotator(value.Y, 0.f, 0.f));
+	//UE_LOG(LogTemp, Display, TEXT("Value inputted is: %f %f"), value.X, value.Y);
 }
 
 void AP_FPS::Input_FirePress_Implementation()
@@ -85,6 +88,17 @@ void AP_FPS::Input_JumpPress_Implementation()
 void AP_FPS::Input_JumpRelease_Implementation()
 {
 	ACharacter::StopJumping();
+}
+
+void AP_FPS::Input_CrouchPress_Implementation()
+{
+	ACharacter::Crouch();
+	_Camera->SetRelativeLocation(FVector(_Camera->GetRelativeLocation().X, _Camera->GetRelativeLocation().Y, _Camera->GetRelativeLocation().Z/2));
+}
+
+void AP_FPS::Input_CrouchRelease_Implementation()
+{
+	_Camera->SetRelativeLocation(FVector(_Camera->GetRelativeLocation().X, _Camera->GetRelativeLocation().Y, _Camera->GetRelativeLocation().Z*2));
 }
 
 UInputMappingContext* AP_FPS::GetMappingContext_Implementation()

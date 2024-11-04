@@ -106,6 +106,29 @@ void AY2PlayerController::StopFiring()
 	}
 }
 
+void AY2PlayerController::StartCrouching()
+{
+	
+	if(APawn* currentPawn = GetPawn())
+	{
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		{
+			IInputtable::Execute_Input_CrouchPress(currentPawn);
+		}
+	}
+}
+
+void AY2PlayerController::StopCrouching()
+{
+	if(APawn* currentPawn = GetPawn())
+	{
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		{
+			IInputtable::Execute_Input_CrouchRelease(currentPawn);
+		}
+	}
+}
+
 void AY2PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
