@@ -20,6 +20,10 @@ void AY2PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(_JumpAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopJumping);
 		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Started, this, &AY2PlayerController::StartFire);
 		EnhancedInputComponent->BindAction(_FireAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopFiring);
+		EnhancedInputComponent->BindAction(_CrouchAction, ETriggerEvent::Started, this, &AY2PlayerController::StartCrouching);
+		EnhancedInputComponent->BindAction(_CrouchAction, ETriggerEvent::Completed, this, &AY2PlayerController::StopCrouching);
+		EnhancedInputComponent->BindAction(_ReloadAction, ETriggerEvent::Started, this, &AY2PlayerController::Reload);
+		EnhancedInputComponent->BindAction(_MeleeAction, ETriggerEvent::Completed, this, &AY2PlayerController::Melee);
 		
 	}
 }
@@ -125,6 +129,28 @@ void AY2PlayerController::StopCrouching()
 		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
 		{
 			IInputtable::Execute_Input_CrouchRelease(currentPawn);
+		}
+	}
+}
+
+void AY2PlayerController::Reload()
+{
+	if(APawn* currentPawn = GetPawn())
+	{
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		{
+			IInputtable::Execute_Input_ReloadPressed(currentPawn);
+		}
+	}
+}
+
+void AY2PlayerController::Melee()
+{
+	if(APawn* currentPawn = GetPawn())
+	{
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		{
+			IInputtable::Execute_Input_MeleePressed(currentPawn);
 		}
 	}
 }

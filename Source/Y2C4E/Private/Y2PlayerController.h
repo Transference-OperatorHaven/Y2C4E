@@ -36,7 +36,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> _FireAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> _CroucAction;
+	TObjectPtr<UInputAction> _CrouchAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> _ReloadAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> _MeleeAction;
 	
 	virtual void SetupInputComponent() override;
 	
@@ -48,6 +52,8 @@ protected:
 	void StopFiring();
 	void StartCrouching();
 	void StopCrouching();
+	void Reload();
+	void Melee();
 
 	virtual void OnPossess(APawn* InPawn) override;
 	

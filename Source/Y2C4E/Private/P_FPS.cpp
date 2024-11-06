@@ -7,8 +7,8 @@
 #include "NavigationSystemTypes.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-
-
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -22,10 +22,24 @@ AP_FPS::AP_FPS()
 	_Health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	_WeaponAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Attach"));
 	_WeaponAttachPoint->SetupAttachment(_Camera);
+	_Knife = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Knife"));
+	_Knife->SetupAttachment(_Camera);
 	
 	_Collider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	_Collider->SetupAttachment(RootComponent);
 	
+}
+
+void AP_FPS::resetWeapon()
+{
+	if(_DefaultWeapon)
+	{
+		FActorSpawnParameters spawnParams;
+		spawnParams.Owner = this;
+		spawnParams.Instigator = this;
+		_WeaponRef = GetWorld()->SpawnActor<AWeapon_Base>(_DefaultWeapon, _WeaponAttachPoint->GetComponentTransform(), spawnParams);
+		_WeaponRef->AttachToComponent(_WeaponAttachPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	}
 }
 
 void AP_FPS::Handle_HealthDead(AController* causer)
@@ -93,12 +107,54 @@ void AP_FPS::Input_JumpRelease_Implementation()
 void AP_FPS::Input_CrouchPress_Implementation()
 {
 	ACharacter::Crouch();
-	_Camera->SetRelativeLocation(FVector(_Camera->GetRelativeLocation().X, _Camera->GetRelativeLocation().Y, _Camera->GetRelativeLocation().Z/2));
+	
 }
 
 void AP_FPS::Input_CrouchRelease_Implementation()
 {
-	_Camera->SetRelativeLocation(FVector(_Camera->GetRelativeLocation().X, _Camera->GetRelativeLocation().Y, _Camera->GetRelativeLocation().Z*2));
+	ACharacter::UnCrouch();
+}
+
+void AP_FPS::Input_ReloadPressed_Implementation()
+{
+	IInputtable::Input_ReloadPressed_Implementation();
+}
+
+void AP_FPS::Input_MeleePressed_Implementation()
+{
+UE_LOG(LogTemp, Display, TEXT("Knifed"));
+	IInputtable::Input_MeleePressed_Implementation();
+	if(_Camera)
+	{
+		UWorld* const world = GetWorld();
+		if(world == nullptr) { return; }
+ 
+		FHitResult hit(ForceInit);
+		FVector start = _Camera->GetComponentLocation();
+		FVector end = start + (_Camera->GetForwardVector() * 300);
+		TArray<AActor*> ActorsToIgnore;
+ 
+		if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
+		   UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), false,
+		   ActorsToIgnore, EDrawDebugTrace::ForDuration, hit, true, FLinearColor::Red,
+		   FLinearColor::Green, 5))
+		{
+			if(hit.GetActor() == this) { return; }
+			UGameplayStatics::ApplyDamage(hit.GetActor(), 100,
+			   GetOwner()->GetInstigatorController(), GetOwner(),
+			   UDamageType::StaticClass());
+ 
+       
+			UE_LOG(LogTemp, Display, TEXT("Hit position: %s"), *hit.ImpactPoint.ToString())
+		}
+	}
+}
+
+void AP_FPS::Pickup_Implementation(AWeapon_Base* weapon)
+{
+	IInputtable::Pickup_Implementation(weapon);
+	_DefaultWeapon = weapon;
+	resetWeapon();
 }
 
 UInputMappingContext* AP_FPS::GetMappingContext_Implementation()

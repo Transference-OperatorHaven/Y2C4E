@@ -11,7 +11,7 @@ void AWeapon_Hitscan::Fire()
  
 	FHitResult hit(ForceInit);
 	FVector start = _Muzzle->GetComponentLocation();
-	FVector end = start + (_Muzzle->GetForwardVector() * 1000);
+	FVector end = start + (_Muzzle->GetForwardVector() * _Range);
 	TArray<AActor*> ActorsToIgnore;
  
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,

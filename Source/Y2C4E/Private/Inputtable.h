@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Weapon_Base.h"
 #include "UObject/Interface.h"
 #include "Inputtable.generated.h"
 
@@ -41,6 +42,12 @@ public:
 	void Input_CrouchPress();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Input_CrouchRelease();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Input_ReloadPressed();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Input_MeleePressed();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Pickup(AWeapon_Base* weapon);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UInputMappingContext* GetMappingContext();

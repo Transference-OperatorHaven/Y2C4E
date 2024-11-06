@@ -20,6 +20,12 @@ class Y2C4E_API AP_FPS : public ACharacter, public IInputtable
 public:
 	// Sets default values for this character's properties
 	AP_FPS();
+	
+	UFUNCTION(BlueprintCallable)
+	void resetWeapon();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<AWeapon_Base> _WeaponRef;
 
 	virtual void Input_Move_Implementation(FVector2D value) override;
 	virtual void Input_ViewControl_Implementation(FVector2D value) override;
@@ -29,6 +35,9 @@ public:
 	virtual void Input_JumpRelease_Implementation() override;
 	virtual void Input_CrouchPress_Implementation() override;
 	virtual void Input_CrouchRelease_Implementation() override;
+	virtual void Input_ReloadPressed_Implementation() override;
+	virtual void Input_MeleePressed_Implementation() override;
+	virtual void Pickup_Implementation(AWeapon_Base* weapon) override;
 
 	virtual UInputMappingContext* GetMappingContext_Implementation() override;
 	virtual UBehaviorTree* GetBehaviourTree_Implementation() override;
@@ -42,10 +51,11 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<USceneComponent> _WeaponAttachPoint;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<UStaticMeshComponent> _Knife;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AWeapon_Base> _DefaultWeapon;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<AWeapon_Base> _WeaponRef;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
