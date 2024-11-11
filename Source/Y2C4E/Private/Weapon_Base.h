@@ -36,7 +36,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float _FireDelay;
 	FTimerHandle _FireDelayTimer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int _currentMagAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int _maxMagAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int _reloadTime;
+	FTimerHandle _reloadTimer;
  
 	UFUNCTION()
 	virtual void Fire();
+	UFUNCTION()
+	virtual void Reload();
 };

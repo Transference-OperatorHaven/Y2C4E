@@ -3,7 +3,7 @@
 
 #include "AIC_FPS.h"
 
-#include "Inputtable.h"
+#include "Inputable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
@@ -25,9 +25,9 @@ void AAIC_FPS::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputtable::StaticClass()))
+	if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputable::StaticClass()))
 	{
-		RunBehaviorTree(IInputtable::Execute_GetBehaviourTree(InPawn));
+		RunBehaviorTree(IInputable::Execute_GetBehaviourTree(InPawn));
 	}
 }
 

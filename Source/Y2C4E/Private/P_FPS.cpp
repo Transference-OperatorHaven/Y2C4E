@@ -56,7 +56,7 @@ void AP_FPS::Input_Move_Implementation(FVector2D value)
 {
 	
 	
-	IInputtable::Input_Move_Implementation(value);
+	IInputable::Input_Move_Implementation(value);
 	AddMovementInput(FVector::VectorPlaneProject(_Camera->GetForwardVector(), FVector::UpVector).GetSafeNormal(), value.Y);
 	AddMovementInput(_Camera->GetRightVector(), value.X);
 
@@ -65,7 +65,7 @@ void AP_FPS::Input_Move_Implementation(FVector2D value)
 void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 {
 	
-	IInputtable::Input_ViewControl_Implementation(value);
+	IInputable::Input_ViewControl_Implementation(value);
 	AddActorWorldRotation(FRotator(0.f, value.X, 0.f));
 	if((_Camera->GetRelativeRotation().Pitch + value.Y) > 90.0f || (_Camera->GetRelativeRotation().Pitch + value.Y) < -90.0f)
 	{
@@ -78,7 +78,7 @@ void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 
 void AP_FPS::Input_FirePress_Implementation()
 {
-	IInputtable::Input_FirePress_Implementation();
+	IInputable::Input_FirePress_Implementation();
 	if(_WeaponRef)
 	{
 		_WeaponRef->StartFire();
@@ -87,7 +87,7 @@ void AP_FPS::Input_FirePress_Implementation()
 
 void AP_FPS::Input_FireRelease_Implementation()
 {
-	IInputtable::Input_FireRelease_Implementation();
+	IInputable::Input_FireRelease_Implementation();
 	if(_WeaponRef)
 	{
 		_WeaponRef->StopFire();
@@ -117,13 +117,13 @@ void AP_FPS::Input_CrouchRelease_Implementation()
 
 void AP_FPS::Input_ReloadPressed_Implementation()
 {
-	IInputtable::Input_ReloadPressed_Implementation();
+	IInputable::Input_ReloadPressed_Implementation();
 }
 
 void AP_FPS::Input_MeleePressed_Implementation()
 {
 UE_LOG(LogTemp, Display, TEXT("Knifed"));
-	IInputtable::Input_MeleePressed_Implementation();
+	IInputable::Input_MeleePressed_Implementation();
 	if(_Camera)
 	{
 		UWorld* const world = GetWorld();
@@ -133,26 +133,25 @@ UE_LOG(LogTemp, Display, TEXT("Knifed"));
 		FVector start = _Camera->GetComponentLocation();
 		FVector end = start + (_Camera->GetForwardVector() * 300);
 		TArray<AActor*> ActorsToIgnore;
- 
+		ActorsToIgnore.Add(this);
+		
 		if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		   UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), false,
 		   ActorsToIgnore, EDrawDebugTrace::ForDuration, hit, true, FLinearColor::Red,
 		   FLinearColor::Green, 5))
 		{
-			if(hit.GetActor() == this) { return; }
 			UGameplayStatics::ApplyDamage(hit.GetActor(), 100,
 			   GetOwner()->GetInstigatorController(), GetOwner(),
 			   UDamageType::StaticClass());
- 
-       
+			UE_LOG(LogTemp, Display, TEXT("Hit thing: %s"), *hit.GetActor()->GetName())
 			UE_LOG(LogTemp, Display, TEXT("Hit position: %s"), *hit.ImpactPoint.ToString())
 		}
 	}
 }
 
-void AP_FPS::Pickup_Implementation(AWeapon_Base* weapon)
+void AP_FPS::Pickup_Implementation(TSubclassOf<AWeapon_Base> weapon)
 {
-	IInputtable::Pickup_Implementation(weapon);
+	IInputable::Pickup_Implementation(weapon);
 	_DefaultWeapon = weapon;
 	resetWeapon();
 }

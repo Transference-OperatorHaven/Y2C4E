@@ -1,6 +1,6 @@
 #include "BTTask_InputFire.h"
  
-#include "Inputtable.h"
+#include "Inputable.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
  
@@ -28,9 +28,9 @@ EBTNodeResult::Type UBTTask_InputFire::ExecuteTask(UBehaviorTreeComponent& Owner
 {
 	const UBlackboardComponent* BBComp = OwnerComp.GetBlackboardComponent();
 	UObject* pawn = BBComp->GetValueAsObject(Key_Pawn.SelectedKeyName);
-	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UInputtable::StaticClass()))
+	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UInputable::StaticClass()))
 	{
-		IInputtable::Execute_Input_FirePress(pawn);
+		IInputable::Execute_Input_FirePress(pawn);
 		return EBTNodeResult::InProgress;
 	}
 	return EBTNodeResult::Failed;
@@ -40,9 +40,9 @@ EBTNodeResult::Type UBTTask_InputFire::AbortTask(UBehaviorTreeComponent& OwnerCo
 {
 	const UBlackboardComponent* BBComp = OwnerComp.GetBlackboardComponent();
 	UObject* pawn = BBComp->GetValueAsObject(Key_Pawn.SelectedKeyName);
-	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UInputtable::StaticClass()))
+	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UInputable::StaticClass()))
 	{
-		IInputtable::Execute_Input_FireRelease(pawn);
+		IInputable::Execute_Input_FireRelease(pawn);
 	}
 	return Super::AbortTask(OwnerComp, NodeMemory);
 }

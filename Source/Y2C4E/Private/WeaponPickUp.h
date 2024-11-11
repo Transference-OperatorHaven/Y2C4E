@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
-#include "DynamicMesh/ColliderMesh.h"
 #include "GameFramework/Actor.h"
 #include "Weapon_Base.h"
 #include "WeaponPickUp.generated.h"
@@ -28,8 +27,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<AWeapon_Base> _Weapon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AWeapon_Base> _Weapon;
 
 	AWeaponPickUp();
 	

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Inputtable.h"
+#include "Inputable.h"
 #include "Weapon_Base.h"
 #include "GameFramework/Character.h"
 #include "P_FPS.generated.h"
@@ -14,7 +14,7 @@ class UCameraComponent;
 class UCapsuleComponent;
 
 UCLASS(Abstract)
-class Y2C4E_API AP_FPS : public ACharacter, public IInputtable
+class Y2C4E_API AP_FPS : public ACharacter, public IInputable
 {
 	GENERATED_BODY()
 public:
@@ -37,7 +37,7 @@ public:
 	virtual void Input_CrouchRelease_Implementation() override;
 	virtual void Input_ReloadPressed_Implementation() override;
 	virtual void Input_MeleePressed_Implementation() override;
-	virtual void Pickup_Implementation(AWeapon_Base* weapon) override;
+	virtual void Pickup_Implementation(TSubclassOf<AWeapon_Base> weapon) override;
 
 	virtual UInputMappingContext* GetMappingContext_Implementation() override;
 	virtual UBehaviorTree* GetBehaviourTree_Implementation() override;

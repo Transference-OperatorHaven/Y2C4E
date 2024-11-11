@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "Weapon_Base.h"
 #include "UObject/Interface.h"
-#include "Inputtable.generated.h"
+#include "Inputable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UInputtable : public UInterface
+class UInputable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -20,7 +20,7 @@ class UInputMappingContext;
 /**
  * 
  */
-class Y2C4E_API IInputtable
+class Y2C4E_API IInputable
 {
 	GENERATED_BODY()
 
@@ -47,7 +47,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Input_MeleePressed();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void Pickup(AWeapon_Base* weapon);
+	void Pickup(TSubclassOf<AWeapon_Base> weapon);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UInputMappingContext* GetMappingContext();

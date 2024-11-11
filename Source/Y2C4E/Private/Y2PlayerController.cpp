@@ -4,7 +4,7 @@
 #include "Y2PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Inputtable.h"
+#include "Inputable.h"
 
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -44,9 +44,9 @@ void AY2PlayerController::Move(const FInputActionValue& value)
 	FVector2D MoveVector = value.Get<FVector2d>();
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_Move(currentPawn, MoveVector);
+			IInputable::Execute_Input_Move(currentPawn, MoveVector);
 		}
 	}
 }
@@ -56,9 +56,9 @@ void AY2PlayerController::ViewControl(const FInputActionValue& value)
 	FVector2D LookVector = value.Get<FVector2d>();
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_ViewControl(currentPawn, LookVector);
+			IInputable::Execute_Input_ViewControl(currentPawn, LookVector);
 		}
 	}
 	
@@ -68,9 +68,9 @@ void AY2PlayerController::Jump()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_JumpPress(currentPawn);
+			IInputable::Execute_Input_JumpPress(currentPawn);
 		}
 	}
 }
@@ -79,9 +79,9 @@ void AY2PlayerController::StopJumping()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_JumpRelease(currentPawn);
+			IInputable::Execute_Input_JumpRelease(currentPawn);
 		}
 	}
 }
@@ -92,9 +92,9 @@ void AY2PlayerController::StartFire()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_FirePress(currentPawn);
+			IInputable::Execute_Input_FirePress(currentPawn);
 		}
 	}
 }
@@ -103,9 +103,9 @@ void AY2PlayerController::StopFiring()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_FireRelease(currentPawn);
+			IInputable::Execute_Input_FireRelease(currentPawn);
 		}
 	}
 }
@@ -115,9 +115,9 @@ void AY2PlayerController::StartCrouching()
 	
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_CrouchPress(currentPawn);
+			IInputable::Execute_Input_CrouchPress(currentPawn);
 		}
 	}
 }
@@ -126,9 +126,9 @@ void AY2PlayerController::StopCrouching()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_CrouchRelease(currentPawn);
+			IInputable::Execute_Input_CrouchRelease(currentPawn);
 		}
 	}
 }
@@ -137,9 +137,9 @@ void AY2PlayerController::Reload()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_ReloadPressed(currentPawn);
+			IInputable::Execute_Input_ReloadPressed(currentPawn);
 		}
 	}
 }
@@ -148,9 +148,9 @@ void AY2PlayerController::Melee()
 {
 	if(APawn* currentPawn = GetPawn())
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(currentPawn, UInputable::StaticClass()))
 		{
-			IInputtable::Execute_Input_MeleePressed(currentPawn);
+			IInputable::Execute_Input_MeleePressed(currentPawn);
 		}
 	}
 }
@@ -161,9 +161,9 @@ void AY2PlayerController::OnPossess(APawn* InPawn)
 	UE_LOG(LogTemp, Display, TEXT("PAWN POSSESSED!!!"));
 	if(UEnhancedInputLocalPlayerSubsystem* _subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputtable::StaticClass()))
+		if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputable::StaticClass()))
 		{
-			_subsystem->AddMappingContext(IInputtable::Execute_GetMappingContext(InPawn), 0);
+			_subsystem->AddMappingContext(IInputable::Execute_GetMappingContext(InPawn), 0);
 		}
 	}
 }
