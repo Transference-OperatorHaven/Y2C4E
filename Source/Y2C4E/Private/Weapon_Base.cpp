@@ -7,7 +7,7 @@ AWeapon_Base::AWeapon_Base()
 {
     PrimaryActorTick.bCanEverTick = false;
     _FireDelay = 0.f;
-    _currentMagAmmo = _maxMagAmmo;
+    
  
     _Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
     RootComponent = _Root;
@@ -18,21 +18,33 @@ AWeapon_Base::AWeapon_Base()
     _Muzzle = CreateDefaultSubobject<UArrowComponent>(TEXT("Muzzle"));
     _Muzzle->SetupAttachment(_Mesh);
 }
+
+void AWeapon_Base::BeginPlay()
+{
+    Super::BeginPlay();
+    _currentMagAmmo = _maxMagAmmo;
+}
  
 void AWeapon_Base::StartFire()
 {
     if(_currentMagAmmo > 0 && !_reloadTimer.IsValid())
     {
-        Fire();
-        if(_FireDelay != 0.f) //if theres a delay between shots
+        canFire = true;
+        isFiring = true;
+        if(!GetWorldTimerManager().IsTimerActive(_FireDelayTimer)) //if theres a delay between shots
         {
-            GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::Fire, _FireDelay, true);
+            Fire();
         }
     }
     else
     {
         if(!_reloadTimer.IsValid())
         {
+            canFire = false;
+            FRotator rotator = FRotator::ZeroRotator;
+            rotator.Pitch = 60.f;
+            rotator.Roll = 20.f;
+            _Mesh->SetRelativeRotation(rotator);
             GetWorld()->GetTimerManager().SetTimer(_reloadTimer, this, &AWeapon_Base::Reload, _reloadTime, false);
         }
     }
@@ -40,20 +52,46 @@ void AWeapon_Base::StartFire()
  
 void AWeapon_Base::StopFire()
 {
-    GetWorld()->GetTimerManager().ClearTimer(_FireDelayTimer);
+    canFire = false;
+    isFiring = false;
 }
  
 void AWeapon_Base::Fire()
 {
     if(_currentMagAmmo > 0)
     {
+        GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::FireDelayFinish, _FireDelay, true);
         OnFire.Broadcast();
         _currentMagAmmo--;
     }
+    else
+    {
+        if(!_reloadTimer.IsValid())
+        {
+            canFire = false;
+            FRotator rotator = FRotator::ZeroRotator;
+            rotator.Pitch = 60.f;
+            rotator.Roll = 20.f;
+            _Mesh->SetRelativeRotation(rotator);
+            GetWorld()->GetTimerManager().SetTimer(_reloadTimer, this, &AWeapon_Base::Reload, _reloadTime, false);
+        }
+    }
 }
+
+void AWeapon_Base::FireDelayFinish()
+{
+    if(canFire)
+    {
+        
+        Fire();
+    }
+}
+
 
 void AWeapon_Base::Reload()
 {
     _currentMagAmmo = _maxMagAmmo;
+    _Mesh->SetRelativeRotation(FRotator::ZeroRotator);
     GetWorld()->GetTimerManager().ClearTimer(_reloadTimer);
+    if(isFiring) canFire = true;
 }
