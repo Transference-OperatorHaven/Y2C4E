@@ -122,7 +122,6 @@ void AP_FPS::Input_ReloadPressed_Implementation()
 
 void AP_FPS::Input_MeleePressed_Implementation()
 {
-UE_LOG(LogTemp, Display, TEXT("Knifed"));
 	IInputable::Input_MeleePressed_Implementation();
 	if(_Camera)
 	{
@@ -137,14 +136,12 @@ UE_LOG(LogTemp, Display, TEXT("Knifed"));
 		
 		if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		   UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), false,
-		   ActorsToIgnore, EDrawDebugTrace::ForDuration, hit, true, FLinearColor::Red,
+		   ActorsToIgnore, EDrawDebugTrace::None, hit, true, FLinearColor::Red,
 		   FLinearColor::Green, 5))
 		{
 			UGameplayStatics::ApplyDamage(hit.GetActor(), 100,
 			   GetOwner()->GetInstigatorController(), GetOwner(),
 			   UDamageType::StaticClass());
-			UE_LOG(LogTemp, Display, TEXT("Hit thing: %s"), *hit.GetActor()->GetName())
-			UE_LOG(LogTemp, Display, TEXT("Hit position: %s"), *hit.ImpactPoint.ToString())
 		}
 	}
 }
