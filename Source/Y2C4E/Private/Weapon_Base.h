@@ -43,7 +43,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int _reloadTime;
 	FTimerHandle _reloadTimer;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool canFire;
 	bool isFiring;
 	
