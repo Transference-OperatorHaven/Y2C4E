@@ -22,6 +22,8 @@ public:
     
 	void  StartFire();
 	void StopFire();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool canFire;
     
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
@@ -43,8 +45,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int _reloadTime;
 	FTimerHandle _reloadTimer;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool canFire;
+	
 	bool isFiring;
 	
 
