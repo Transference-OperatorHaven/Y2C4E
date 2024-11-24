@@ -82,7 +82,6 @@ void AWeapon_Base::FireDelayFinish()
 {
     if(canFire)
     {
-        
         Fire();
     }
 }

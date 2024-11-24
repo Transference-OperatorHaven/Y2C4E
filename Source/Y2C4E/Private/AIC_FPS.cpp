@@ -5,6 +5,7 @@
 
 #include "Inputable.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Perception/AIPerceptionTypes.h"
 
 
 // Sets default values
@@ -30,6 +31,7 @@ void AAIC_FPS::OnPossess(APawn* InPawn)
 		RunBehaviorTree(IInputable::Execute_GetBehaviourTree(InPawn));
 	}
 }
+
 
 // Called every frame
 void AAIC_FPS::Tick(float DeltaTime)
