@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AISenseConfig_Damage.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "AIC_FPS.generated.h"
 
 UCLASS(Abstract)
@@ -21,8 +23,24 @@ protected:
 	virtual void BeginPlay() override;
 
 	
+	
 	virtual void OnPossess(APawn* InPawn) override;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAISenseConfig_Sight* _sightConfig;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAISenseConfig_Damage* _damageConfig;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAIPerceptionComponent> _AIPerception;
+	
+	UFUNCTION()
+	void Handle_OnDeath(AController* Causer);
+	UFUNCTION()
+	void Handle_TargetPerceptionChanged(AActor* OtherActor, FAIStimulus Stimulus);
+	UFUNCTION()
+	void Handle_TargetPerceptionForgotten(AActor* Actor);
+	
+	
 
 private:
 };

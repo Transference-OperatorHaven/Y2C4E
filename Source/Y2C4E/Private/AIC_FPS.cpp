@@ -3,24 +3,23 @@
 
 #include "AIC_FPS.h"
 
+#include "AI_FPS.h"
+#include "HealthComponent.h"
 #include "Inputable.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionTypes.h"
+#include "Perception/AISenseConfig_Damage.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 
 // Sets default values
-AAIC_FPS::AAIC_FPS()
-{
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-}
+
 
 // Called when the game starts or when spawned
-void AAIC_FPS::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
+
 
 void AAIC_FPS::OnPossess(APawn* InPawn)
 {
@@ -32,6 +31,74 @@ void AAIC_FPS::OnPossess(APawn* InPawn)
 	}
 }
 
+void AAIC_FPS::Handle_OnDeath(AController* Causer)
+{
+	AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
+	pawn->_WeaponRef->Destroy();
+	Destroy();
+}
+
+void AAIC_FPS::Handle_TargetPerceptionChanged( AActor* OtherActor, FAIStimulus Stimulus)
+{
+	UE_LOG(LogTemp, Display, TEXT("Hey!"))
+	if(OtherActor == UGameplayStatics::GetPlayerPawn(this, 0))
+	{
+		
+		UBlackboardComponent* BBc = (UBlackboardComponent*)GetBlackboardComponent();
+		BBc->SetValueAsObject(TEXT("TargetActor"),OtherActor);
+		
+		AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
+		pawn->_WeaponRef->canFire = true;
+	}
+}
+void AAIC_FPS::Handle_TargetPerceptionForgotten(AActor* Actor)
+{
+	UE_LOG(LogTemp,	Display, TEXT("FORGORRR"));
+	UBlackboardComponent* BBc = (UBlackboardComponent*)GetBlackboardComponent();
+	BBc->ClearValue()
+	BBc->SetValueAsObject(TEXT("TargetActor"), NULL );
+	
+	AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
+	pawn->_WeaponRef->canFire = false;
+}
+
+AAIC_FPS::AAIC_FPS()
+{
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	_AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception"));
+	
+	_sightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	_sightConfig->SightRadius = 1000;
+	_sightConfig->LoseSightRadius = 2000;
+	_sightConfig->PeripheralVisionAngleDegrees = 45;
+	_sightConfig->SetMaxAge(2.0f);
+	_sightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	_sightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	_sightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	_AIPerception->ConfigureSense(*_sightConfig);
+	_AIPerception->SetSenseEnabled(*_sightConfig->GetSenseImplementation(), true);
+
+	
+	_damageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("Damage Config"));
+	_damageConfig->SetMaxAge(5.0f);
+	_AIPerception->ConfigureSense(*_damageConfig);
+	_AIPerception->SetSenseEnabled(*_damageConfig->GetSenseImplementation(), true);
+
+	_AIPerception->SetDominantSense(_sightConfig->GetSenseImplementation());
+	if(_AIPerception->IsSenseEnabled(_sightConfig->GetSenseImplementation())){UE_LOG(LogTemp, Display, TEXT("SENSE SIGHT YES"));}
+}
+
+void AAIC_FPS::BeginPlay()
+{
+	Super::BeginPlay();
+
+	_AIPerception->OnTargetPerceptionUpdated.AddUniqueDynamic(this, &AAIC_FPS::Handle_TargetPerceptionChanged);
+	_AIPerception->OnTargetPerceptionForgotten.AddUniqueDynamic(this, &AAIC_FPS::Handle_TargetPerceptionForgotten);
+	_AIPerception->SetActive(true);
+	AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
+	pawn->_Health->OnDead.AddUniqueDynamic(this, &AAIC_FPS::Handle_OnDeath);
+}
 
 // Called every frame
 void AAIC_FPS::Tick(float DeltaTime)

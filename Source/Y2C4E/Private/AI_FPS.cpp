@@ -19,63 +19,18 @@ AAI_FPS::AAI_FPS()
 	
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	_AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception"));
-	
-	_sightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
-	_sightConfig->SightRadius = 1000;
-	_sightConfig->LoseSightRadius = 2000;
-	_sightConfig->PeripheralVisionAngleDegrees = 45;
-	_sightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	_sightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-	_sightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	
-	_AIPerception->ConfigureSense(*_sightConfig);
-	_AIPerception->SetSenseEnabled(*_sightConfig->GetSenseImplementation(), true);
-	_AIPerception->SetDominantSense(_sightConfig->GetSenseImplementation());
-	if(_AIPerception->IsSenseEnabled(_sightConfig->GetSenseImplementation())){UE_LOG(LogTemp, Display, TEXT("SENSE SIGHT YES"));}
-	else{UE_LOG(LogTemp, Display, TEXT("EW STINKY"));}
 }
 
 // Called when the game starts or when spawned
 
 
-void AAI_FPS::Handle_OnDeath(AController* Causer)
-{
-	_WeaponRef->Destroy();
-	Destroy();
-}
 
-void AAI_FPS::Handle_TargetPerceptionChanged( AActor* OtherActor, FAIStimulus Stimulus)
-{
-	UE_LOG(LogTemp, Display, TEXT("Hey!"))
-	if(OtherActor == UGameplayStatics::GetPlayerPawn(this, 0))
-	{
-		AAIC_FPS* controller = Cast<AAIC_FPS>(this->GetController());
-		UBlackboardComponent* BBc = controller->GetBlackboardComponent();
-		BBc->SetValueAsObject(TEXT("TargetActor"),OtherActor);
-
-		_WeaponRef->canFire = true;
-	}
-}
-void AAI_FPS::Handle_TargetPerceptionForgotten(AActor* Actor)
-{
-	AAIC_FPS* controller = Cast<AAIC_FPS>(this->GetController());
-	UBlackboardComponent* BBc = controller->GetBlackboardComponent();
-	BBc->ClearValue(TEXT("TargetActor"));
-	
-	_WeaponRef->canFire = false;
-}
 
 void AAI_FPS::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_AIPerception->OnTargetPerceptionUpdated.AddUniqueDynamic(this, &AAI_FPS::Handle_TargetPerceptionChanged);
-	_AIPerception->OnTargetPerceptionForgotten.AddUniqueDynamic(this, &AAI_FPS::Handle_TargetPerceptionForgotten);
-	if(_AIPerception.IsNull()){UE_LOG(LogTemp,Display,TEXT("AI PERCEPTION NULL"));}
-	else{UE_LOG(LogTemp,Display,TEXT("AI PECEPTION YES"));}
-	_AIPerception->SetActive(true);
-	_Health->OnDead.AddUniqueDynamic(this, &AAI_FPS::Handle_OnDeath);
+	
 	
 }
 
