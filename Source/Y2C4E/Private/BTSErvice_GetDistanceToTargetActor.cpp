@@ -35,7 +35,10 @@ void UBTService_GetDistanceToTargetActor::TickNode(UBehaviorTreeComponent& Owner
 	if(b == NULL)
 	{
 		UE_LOG(LogTemp, Display, TEXT("target actor null"));
+		BBComp->ClearValue(Key_TargetActor.SelectedKeyName);
+		BBComp->SetValueAsFloat(Key_Distance.SelectedKeyName, 10 );
 		return;
+
 	}
 	AActor* a = Cast<AActor>(BBComp->GetValueAsObject(Key_Pawn.SelectedKeyName));
 	if(a == NULL)

@@ -6,6 +6,7 @@
 #include "AI_FPS.h"
 #include "HealthComponent.h"
 #include "Inputable.h"
+#include "Y2PlayerController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -33,14 +34,18 @@ void AAIC_FPS::OnPossess(APawn* InPawn)
 
 void AAIC_FPS::Handle_OnDeath(AController* Causer)
 {
-	AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
+	AAI_FPS* pawn = (AAI_FPS*)GetPawn();
+
+	AY2PlayerController* player = Cast<AY2PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	player->IncrementScore();
 	pawn->_WeaponRef->Destroy();
+	pawn->Destroy();
 	Destroy();
 }
 
 void AAIC_FPS::Handle_TargetPerceptionChanged( AActor* OtherActor, FAIStimulus Stimulus)
 {
-	UE_LOG(LogTemp, Display, TEXT("Hey!"))
+	
 	if(OtherActor == UGameplayStatics::GetPlayerPawn(this, 0))
 	{
 		
@@ -53,11 +58,9 @@ void AAIC_FPS::Handle_TargetPerceptionChanged( AActor* OtherActor, FAIStimulus S
 }
 void AAIC_FPS::Handle_TargetPerceptionForgotten(AActor* Actor)
 {
-	UE_LOG(LogTemp,	Display, TEXT("FORGORRR"));
-	UBlackboardComponent* BBc = (UBlackboardComponent*)GetBlackboardComponent();
-	BBc->ClearValue()
-	BBc->SetValueAsObject(TEXT("TargetActor"), NULL );
 	
+	UBlackboardComponent* BBc = (UBlackboardComponent*)GetBlackboardComponent();
+	BBc->ClearValue(TEXT("TargetActor"));
 	AAI_FPS* pawn  = (AAI_FPS*)GetPawn();
 	pawn->_WeaponRef->canFire = false;
 }
@@ -86,7 +89,6 @@ AAIC_FPS::AAIC_FPS()
 	_AIPerception->SetSenseEnabled(*_damageConfig->GetSenseImplementation(), true);
 
 	_AIPerception->SetDominantSense(_sightConfig->GetSenseImplementation());
-	if(_AIPerception->IsSenseEnabled(_sightConfig->GetSenseImplementation())){UE_LOG(LogTemp, Display, TEXT("SENSE SIGHT YES"));}
 }
 
 void AAIC_FPS::BeginPlay()

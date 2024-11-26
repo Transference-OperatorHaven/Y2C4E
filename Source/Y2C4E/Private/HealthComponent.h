@@ -21,12 +21,12 @@ public:
 	FHealthDeadSignature OnDead;
 	UPROPERTY(BlueprintAssignable)
 	FHealthDamagedSignature OnDamaged;
-
-protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float _MaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float _CurrentHealth;
+protected:
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

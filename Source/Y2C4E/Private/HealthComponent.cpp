@@ -30,8 +30,9 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	AController* Instigator, AActor* DamageCauser)
 {
 	const float change = FMath::Min(_CurrentHealth, Damage);
+	OnDamaged.Broadcast(_CurrentHealth, _MaxHealth, change);
+	
 	_CurrentHealth -= change;
-	UE_LOG(LogTemp, Display, TEXT("Damage taken: %f, %f"), change, _CurrentHealth);
 	if(_CurrentHealth <= 0.f)
 	{
 		OnDead.Broadcast(Instigator);

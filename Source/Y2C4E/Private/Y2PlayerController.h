@@ -21,11 +21,10 @@ class Y2C4E_API AY2PlayerController : public APlayerController, public IInterfac
 
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UWidget_HUD> _HUDWidgetClass;
-	TObjectPtr<UWidget_HUD> _HUDWidget;
+	
  
 	virtual void BeginPlay() override;
+	
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> _ViewControlAction;
@@ -43,6 +42,7 @@ protected:
 	TObjectPtr<UInputAction> _MeleeAction;
 	
 	virtual void SetupInputComponent() override;
+
 	
 	void Move(const FInputActionValue& value);
 	void ViewControl(const FInputActionValue& value);
@@ -65,8 +65,15 @@ protected:
 	UInputAction* FireAction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UInputAction* JumpAction;*/
-
-	
+public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UWidget_HUD> _HUDWidgetClass;
+	TObjectPtr<UWidget_HUD> _HUDWidget;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int _Score;
+	UFUNCTION()
+	void IncrementScore();
+	void Fail();
 
 	
 	

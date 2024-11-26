@@ -34,7 +34,7 @@ protected:
 	TObjectPtr<UAIPerceptionComponent> _AIPerception;
 	
 	UFUNCTION()
-	void Handle_OnDeath(AController* Causer);
+	virtual void Handle_OnDeath(AController* Causer);
 	UFUNCTION()
 	void Handle_TargetPerceptionChanged(AActor* OtherActor, FAIStimulus Stimulus);
 	UFUNCTION()

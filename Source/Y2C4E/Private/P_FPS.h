@@ -23,6 +23,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void resetWeapon();
+	UFUNCTION(BlueprintCallable)
+	void Winner();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<AWeapon_Base> _WeaponRef;

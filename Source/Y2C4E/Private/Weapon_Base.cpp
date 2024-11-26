@@ -2,6 +2,7 @@
 
 #include "ScreenPass.h"
 #include "Components/ArrowComponent.h"
+#include "Components/AudioComponent.h"
 
 AWeapon_Base::AWeapon_Base()
 {
@@ -17,6 +18,9 @@ AWeapon_Base::AWeapon_Base()
  
     _Muzzle = CreateDefaultSubobject<UArrowComponent>(TEXT("Muzzle"));
     _Muzzle->SetupAttachment(_Mesh);
+
+    _Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+    _Audio->SetupAttachment(_Muzzle);
 }
 
 void AWeapon_Base::BeginPlay()
@@ -62,6 +66,8 @@ void AWeapon_Base::Fire()
     {
         GetWorld()->GetTimerManager().SetTimer(_FireDelayTimer, this, &AWeapon_Base::FireDelayFinish, _FireDelay, true);
         OnFire.Broadcast();
+        _Audio->Sound = _sound;
+        _Audio->Play();
         _currentMagAmmo--;
     }
     else

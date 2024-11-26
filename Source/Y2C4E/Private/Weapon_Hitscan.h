@@ -13,8 +13,10 @@ public:
 	virtual void Fire() override;
  
 protected:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float _Damage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float _Range;
+	
 };

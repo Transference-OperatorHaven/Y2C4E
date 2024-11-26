@@ -4,7 +4,10 @@
 #include "Y2PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HealthComponent.h"
 #include "Inputable.h"
+#include "P_FPS.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -28,19 +31,34 @@ void AY2PlayerController::SetupInputComponent()
 	}
 }
 
+
+
 void AY2PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
  
 	if(_HUDWidgetClass)
 	{
-		_HUDWidget = CreateWidget<UWidget_HUD, AY2PlayerController*>( this, _HUDWidgetClass.Get());
+       _HUDWidget = CreateWidget<UWidget_HUD, AY2PlayerController*>( this, _HUDWidgetClass.Get());
 		_HUDWidget->AddToViewport();
+		_HUDWidget->UpdateScore(_Score);
+		
+		
 	}
 }
 
+void AY2PlayerController::IncrementScore()
+{ 
+	_Score++;
+	_HUDWidget->UpdateScore(_Score);
+	_HUDWidget->UpdateHealth(Cast<AP_FPS>(GetPawn())->_Health->_CurrentHealth/Cast<AP_FPS>(GetPawn())->_Health->_MaxHealth);
+
+}
+
+
 void AY2PlayerController::Move(const FInputActionValue& value)
 {
+
 	FVector2D MoveVector = value.Get<FVector2d>();
 	if(APawn* currentPawn = GetPawn())
 	{
@@ -158,7 +176,6 @@ void AY2PlayerController::Melee()
 void AY2PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	UE_LOG(LogTemp, Display, TEXT("PAWN POSSESSED!!!"));
 	if(UEnhancedInputLocalPlayerSubsystem* _subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		if(UKismetSystemLibrary::DoesImplementInterface(InPawn, UInputable::StaticClass()))

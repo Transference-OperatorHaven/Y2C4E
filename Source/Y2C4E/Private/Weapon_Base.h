@@ -28,7 +28,10 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<USceneComponent> _Root;
- 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> _sound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAudioComponent> _Audio;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> _Mesh;
     

@@ -5,6 +5,7 @@
 
 #include "HealthComponent.h"
 #include "NavigationSystemTypes.h"
+#include "Y2PlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,7 +15,6 @@
 // Sets default values
 AP_FPS::AP_FPS()
 {
-	UE_LOG(LogTemp, Display, TEXT("PAWN SPAWNED AND CONSTRUCTED"));
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -27,7 +27,10 @@ AP_FPS::AP_FPS()
 	
 	_Collider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	_Collider->SetupAttachment(RootComponent);
-	
+
+
+	_Health->OnDamaged.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDamaged);
+	_Health->OnDead.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDead);
 }
 
 void AP_FPS::resetWeapon()
@@ -44,12 +47,13 @@ void AP_FPS::resetWeapon()
 
 void AP_FPS::Handle_HealthDead(AController* causer)
 {
-	UE_LOG(LogTemp, Display, TEXT("PENIS"));
+	if(Cast<AY2PlayerController>(GetController())) {Cast<AY2PlayerController>(GetController())->_HUDWidget->Loss();}
 }
 
 void AP_FPS::Handle_HealthDamaged(float current, float max, float change)
 {
-	UE_LOG(LogTemp, Display, TEXT("PENIS 2"));
+	UE_LOG(LogTemp, Display, TEXT("health MAM"));
+	if(Cast<AY2PlayerController>(GetController())) {Cast<AY2PlayerController>(GetController())->_HUDWidget->UpdateHealth(_Health->_CurrentHealth/_Health->_MaxHealth);}
 }
 
 void AP_FPS::Input_Move_Implementation(FVector2D value)
@@ -69,11 +73,9 @@ void AP_FPS::Input_ViewControl_Implementation(FVector2D value)
 	AddActorWorldRotation(FRotator(0.f, value.X, 0.f));
 	if((_Camera->GetRelativeRotation().Pitch + value.Y) > 90.0f || (_Camera->GetRelativeRotation().Pitch + value.Y) < -90.0f)
 	{
-		//UE_LOG(LogTemp,Display, TEXT("The pitch is: %f and value.Y is %f so together they'd exceed limits"), _Camera->GetRelativeRotation().Pitch, value.Y);
 		value.Y = 0;
 	}	
 	_Camera->AddLocalRotation(FRotator(value.Y, 0.f, 0.f));
-	//UE_LOG(LogTemp, Display, TEXT("Value inputted is: %f %f"), value.X, value.Y);
 }
 
 void AP_FPS::Input_FirePress_Implementation()
@@ -169,6 +171,7 @@ void AP_FPS::BeginPlay()
 	Super::BeginPlay();
 
 	_Health->OnDamaged.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDamaged);
+	if(_Health->OnDamaged.IsBound()) { UE_LOG(LogTemp,Display, TEXT("WHAT"));}
 	_Health->OnDead.AddUniqueDynamic(this, &AP_FPS::Handle_HealthDead);
 
 	if(_DefaultWeapon)
@@ -180,6 +183,12 @@ void AP_FPS::BeginPlay()
 		_WeaponRef->AttachToComponent(_WeaponAttachPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
 	
+}
+
+void AP_FPS::Winner()
+{
+	UE_LOG(LogTemp, Display, TEXT("stpid bird design"));
+	if(Cast<AY2PlayerController>(GetController())) {Cast<AY2PlayerController>(GetController())->_HUDWidget->Win();}
 }
 
 // Called every frame
